@@ -1,0 +1,24 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+}
+
+.logo_title {
+    display: flex;
+    align-items: center;
+    color: #f06292;
+    margin-top: 0.5rem;
+}
+
+.logo {
+    margin-top: 0.5rem;
+    font-size: 2rem;
+    margin-right: 0.5rem;
+}
+
+.title {
+    font-size: 2rem;
+}
