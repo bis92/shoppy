@@ -9,7 +9,7 @@
 .logo_title {
     display: flex;
     align-items: center;
-    color: #f06292;
+    color: var(--shoppy-brand);
     margin-top: 0.5rem;
 }
 
@@ -21,4 +21,63 @@
 
 .title {
     font-size: 2rem;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 22vw;
+}
+
+.nav_sm {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 15vw;
+}
+
+.products {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--shoppy-brand);
+    cursor: pointer;
+}
+
+.cart {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.addProduct {
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.profile {
+    width: 6.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.profileImg {
+    width: 3rem;
+    border-radius: 50%;
+}
+
+.signInBtn {
+    background-color: var(--shoppy-brand);
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--color-white);
+    border-style: none;
+    padding: 0.5rem;
+}
+
+.signOutBtn {
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-style: none;
+    background-color: transparent;
 }

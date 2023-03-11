@@ -3,12 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom';
 import NotFound from './page/NotFound';
 import Products from './page/Products';
 import ProductDetail from './page/ProductDetail';
+import Carts from './page/Carts';
+import AddProduct from './page/AddProduct';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 
 const router = createBrowserRouter([
   {
@@ -23,6 +27,14 @@ const router = createBrowserRouter([
       {
         path: "products/:productId",
         element: <ProductDetail />
+      },
+      {
+        path: "carts",
+        element: <Carts />,
+      },
+      {
+        path: "addProduct",
+        element: <AddProduct />
       }
     ]
   }
