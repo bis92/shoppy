@@ -10,9 +10,9 @@ import ProductDetail from './page/ProductDetail';
 import Carts from './page/Carts';
 import AddProduct from './page/AddProduct';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import Home from './page/Home';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
 
 const router = createBrowserRouter([
   {
@@ -20,6 +20,10 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <NotFound />,
     children: [
+      {
+        path: "/",
+        element: <Home />
+      },
       {
         path: "products",
         element: <Products />

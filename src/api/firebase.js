@@ -100,3 +100,16 @@ export const onAuthStateCheck = async () => {
     return unsubscribe();
 }
 
+export const addProduct = ({ imgURL, name, price, category, description ,option }) => {
+  console.log(imgURL, name, price, category, description ,option);
+  const db = getDatabase();
+  set(ref(db, 'products/'), {
+    imgURL,
+    name,
+    price,
+    category,
+    description,
+    option
+  });
+}
+
