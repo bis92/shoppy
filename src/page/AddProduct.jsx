@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './AddProduct.module.css';
 import axios from 'axios';
 import { addProduct } from '../api/firebase';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddProduct() {
 
@@ -48,9 +49,10 @@ export default function AddProduct() {
         console.log(res);
         if(res && res.status === 200){
             console.log(res.data.url);
-            await setNewProduct((prev) => ({ ...prev, imgURL: res.data.url}));
+            const productId = uuidv4();
+            const imgURL = res.data.url;
+            imgURL && addProduct(newProduct, productId, imgURL);
         }
-        addProduct(newProduct);
     }
     const { file, name, price, category, description, option } = newProduct;
     return (

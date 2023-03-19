@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, signOut, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, child, ref, set, get } from "firebase/database";
+import { getDatabase, child, ref, set, get, push } from "firebase/database";
 
 const { 
     REACT_APP_API_KEY, 
@@ -100,10 +100,12 @@ export const onAuthStateCheck = async () => {
     return unsubscribe();
 }
 
-export const addProduct = ({ imgURL, name, price, category, description ,option }) => {
-  console.log(imgURL, name, price, category, description ,option);
+export const addProduct = ({ name, price, category, description ,option }, productId, imgURL) => {
   const db = getDatabase();
-  set(ref(db, 'products/'), {
+  const productsRef = ref(db, 'products');
+  const newProductRef = push(productsRef);
+  set(newProductRef, {
+    id: productId,
     imgURL,
     name,
     price,
@@ -113,3 +115,15 @@ export const addProduct = ({ imgURL, name, price, category, description ,option 
   });
 }
 
+export const getProducts = async () => {
+  const dbRef = ref(getDatabase());
+  return await get(child(dbRef, 'products')).then((snapshot) => {
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
+}

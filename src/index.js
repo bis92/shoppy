@@ -3,16 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './page/NotFound';
 import Products from './page/Products';
 import ProductDetail from './page/ProductDetail';
 import Carts from './page/Carts';
 import AddProduct from './page/AddProduct';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from './page/Home';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -45,9 +46,11 @@ const router = createBrowserRouter([
 ])
 
 root.render(
-  <RouterProvider router={router}>
-    <App />
-  </RouterProvider>
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router}>
+      <App />
+    </RouterProvider>
+  </QueryClientProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
