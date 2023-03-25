@@ -100,7 +100,7 @@ export const onAuthStateCheck = async () => {
     return unsubscribe();
 }
 
-export const addProduct = ({ name, price, category, description ,option }, productId, imgURL) => {
+export const addProduct = async ({ name, price, category, description ,option }, productId, imgURL) => {
   const db = getDatabase();
   const productsRef = ref(db, 'products');
   const newProductRef = push(productsRef);
