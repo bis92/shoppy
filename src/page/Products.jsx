@@ -5,17 +5,6 @@ import Product from '../components/Product';
 
 export default function Products() {
 
-    // useEffect(() => {
-    //     console.log(products)
-    // }, [products])
-
-    const readProducts = async () => {
-        const res = await getProducts();
-        const objectKeys = Object.keys(res);
-        objectKeys.map((keyId) => res[keyId])
-        console.log(Object.keys(res));
-    }
-
     const { isLoading, isError, data: products , error } = useQuery(['products'], () => getProducts());
     if (isLoading) {
         return <span>Loading...</span>
@@ -24,8 +13,8 @@ export default function Products() {
         return <span>Error: {error.message}</span>
     }
     return (
-        <ul className='flex flex-col justify-around flex-wrap list-none'>
-            <li className='flex m-4'>{products && Object.keys(products).map((product, index) => <Product keyId={product} product={products[product]}/>)}</li>
+        <ul className='flex flex-col justify-around list-none'>
+            <li className='flex flex-wrap justify-around m-8'>{products && Object.keys(products).map((product) => <Product keyId={product} key={product} product={products[product]}/>)}</li>
         </ul>
     );
 }

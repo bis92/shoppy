@@ -40,11 +40,17 @@ export default function AddProduct() {
     }
 
     const handleChangeFile = (e) => {
+        console.log(e);
+
+        // 파일 정보
         console.log(e.target.files);
+        // 가짜 경로
         console.log(e.target.value);
         const files = e.target.files;
-        const fileReader = new FileReader();
         
+        // setSelectedImg(e.target.value);
+
+        const fileReader = new FileReader();
         fileReader.readAsDataURL(files[0]);
         fileReader.onload = (e) => {
             setSelectedImg(e.target.result);

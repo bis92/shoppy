@@ -1,46 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from './Header.module.css';
 import { AiTwotoneShop, AiOutlineShoppingCart } from 'react-icons/ai';
-import { googleLogin, googleLogout, onAuthStateCheck } from '../api/firebase';
+import { googleLogin, googleLogout } from '../api/firebase';
 import { GrEdit } from 'react-icons/gr';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { UserContext } from '../context/UserContext';
 export default function Header() {
 
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
+    const { user, updateUser } = useContext(UserContext);
 
     const handleLogin = async () => {
         const res = await googleLogin();
-        setUser(res);
+        // setUser(res);
+        updateUser(res);
     }
 
     const handleLogout = async () => {
         const res = await googleLogout();
-        setUser(res);
+        // setUser(res);
+        updateUser(res);
     }
 
     useEffect(() => {
         const auth = getAuth();
         onAuthStateChanged(auth, (user) => {
         if (user) {
-            setUser(user);
+            // setUser(user);
+            updateUser(user)
         } else {
-            setUser(null);
+            // setUser(null);
+            updateUser(null);
         }
         });
     }, [])
-
-    // useEffect(() => {
-    //     const auth = getAuth();
-    //     onAuthStateChanged(auth, (user) => {
-    //     if (user) {
-    //         setUser(user);
-    //     } else {
-    //         setUser(null);
-    //     }
-    //     });
-    // }, [user])
 
     return (
         <header className={styles.header}>
@@ -74,4 +69,6 @@ export default function Header() {
         </header>
     );
 }
+
+
 
