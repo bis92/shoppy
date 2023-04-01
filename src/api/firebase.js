@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, signOut, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, child, ref, set, get, push } from "firebase/database";
+import { getDatabase, child, ref, set, get, push, update, runTransaction  } from "firebase/database";
 
 const { 
     REACT_APP_API_KEY, 
@@ -50,7 +50,7 @@ function writeUserData(userId, name, email, imageUrl) {
       profile_picture : imageUrl,
       created_at: new Date().toISOString()
     });
-  }
+}
 
 export const googleLogin = async () => {
     return signInWithPopup(auth, provider)
@@ -126,4 +126,79 @@ export const getProducts = async () => {
   }).catch((error) => {
     console.error(error);
   });
+}
+
+export const addCartDetailCount = async (userId, productId) => {
+  const db = getDatabase();
+  const postRef = ref(db, `/user-cart/${userId}`);
+
+  runTransaction(postRef, (post) => {
+    console.log('post 확인: ', post);
+    if (post) {
+      
+      // if (post && post.stars[uid]) {
+      //   post.starCount--;
+      //   post.stars[uid] = null;
+      // } else {
+      //   post.starCount++;
+      //   if (!post.stars) {
+      //     post.stars = {};
+      //   }
+      //   post.stars[uid] = true;
+      // }
+    }
+    return post;
+  });
+}
+
+export const getCarts = async (userId) => {
+  const dbRef = ref(getDatabase());
+  return get(child(dbRef, `user-cart/${userId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
+}
+
+export const addCart = async (id, imgURL, name, size, price, userId) => {
+
+  const db = getDatabase();
+  const postData = {
+    productId: id,
+    imgURL,
+    name,
+    size,
+    price,
+    userId,
+    count: 1
+  };
+
+  try {
+    const newPostKey = push(child(ref(db), 'carts')).key;
+    const updates = {};
+    updates['/user-cart/' + userId + '/' + newPostKey] = postData;
+  
+    const userCarts = await getCarts(userId);
+    if(userCarts){
+      const arrayUserCarts = Object.values(userCarts); 
+      if(arrayUserCarts && arrayUserCarts.length > 0 && arrayUserCarts.some((cartItem) => ((cartItem.productId === id) && (cartItem.size === size)))){
+        return {
+          status: 400,
+          message: '상품이 이미 장바구니에 있습니다.'
+        }
+      }
+    }
+    await update(ref(db), updates);
+    return {
+      status: 200,
+      message: '상품을 장바구니에 등록했습니다. :)'
+    }
+  } catch(err) {
+    console.error('add cart firebase api err: ', err);
+    throw err;
+  }
 }

@@ -47,7 +47,7 @@ export default function AddProduct() {
         // 가짜 경로
         console.log(e.target.value);
         const files = e.target.files;
-        
+
         // setSelectedImg(e.target.value);
 
         const fileReader = new FileReader();
