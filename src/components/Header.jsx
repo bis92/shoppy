@@ -1,27 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './Header.module.css';
-import { AiTwotoneShop, AiOutlineShoppingCart } from 'react-icons/ai';
+import { AiTwotoneShop } from 'react-icons/ai';
 import { getCarts, googleLogin, googleLogout } from '../api/firebase';
 import { GrEdit } from 'react-icons/gr';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { UserContext } from '../context/UserContext';
+import UserCart from './UserCart';
 export default function Header() {
 
     const navigate = useNavigate();
-    // const [user, setUser] = useState(null);
     const { user, updateUser } = useContext(UserContext);
     const [cartItem, setCartItem] = useState([]);
 
     const handleLogin = async () => {
         const res = await googleLogin();
-        // setUser(res);
         updateUser(res);
     }
 
     const handleLogout = async () => {
         const res = await googleLogout();
-        // setUser(res);
         updateUser(res);
     }
 
@@ -38,20 +35,7 @@ export default function Header() {
     }
 
     useEffect(() => {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // setUser(user);
-            updateUser(user)
-        } else {
-            // setUser(null);
-            updateUser(null);
-        }
-        });
-    }, [])
-
-    useEffect(() => {
-        handleGetCart();
+        // handleGetCart();
     }, [user])
 
     return (
@@ -62,10 +46,10 @@ export default function Header() {
             </span>
             <nav className={user === null ? styles.nav_sm:styles.nav}>
                 <span className={styles.products} onClick={() => navigate('products')}>Product</span>
-                <span className={styles.cart} onClick={() => { user === null? navigate('/'):navigate('carts')}}>
-                    <AiOutlineShoppingCart />
-                    {cartItem.length > 0 && <span className='absolute top-0 ml-4 rounded-2xl text-sm bg-red-600 py-1 px-3 text-white border-r-0'>{cartItem.length}</span>}
-                </span>
+                {user && <UserCart
+
+                    />
+                }
                 {user && user.email === 'bistheonlyone@gmail.com' && 
                     <span className={styles.addProduct} onClick={() => navigate('addProduct')}>
                         <GrEdit />

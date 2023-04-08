@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { getProducts } from '../api/firebase';
 import { useQuery } from '@tanstack/react-query';
 import Product from '../components/Product';

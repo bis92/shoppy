@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, signOut, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, child, ref, set, get, push, update, runTransaction  } from "firebase/database";
+import { getDatabase, child, ref, set, get, push, update, runTransaction, remove  } from "firebase/database";
 
 const { 
     REACT_APP_API_KEY, 
@@ -128,33 +128,11 @@ export const getProducts = async () => {
   });
 }
 
-export const addCartDetailCount = async (userId, productId) => {
-  const db = getDatabase();
-  const postRef = ref(db, `/user-cart/${userId}`);
-
-  runTransaction(postRef, (post) => {
-    console.log('post 확인: ', post);
-    if (post) {
-      
-      // if (post && post.stars[uid]) {
-      //   post.starCount--;
-      //   post.stars[uid] = null;
-      // } else {
-      //   post.starCount++;
-      //   if (!post.stars) {
-      //     post.stars = {};
-      //   }
-      //   post.stars[uid] = true;
-      // }
-    }
-    return post;
-  });
-}
-
 export const getCarts = async (userId) => {
   const dbRef = ref(getDatabase());
   return get(child(dbRef, `user-cart/${userId}`)).then((snapshot) => {
     if (snapshot.exists()) {
+      console.log(snapshot.val());
       return snapshot.val();
     } else {
       console.log("No data available");
@@ -202,3 +180,48 @@ export const addCart = async (id, imgURL, name, size, price, userId) => {
     throw err;
   }
 }
+
+
+export const removeCartItem = (userId, cartId) => {
+  const db = getDatabase();
+  remove(ref(db, `/user-cart/${userId}/${cartId}`))
+  .then((res) => {
+    // Data saved successfully!
+    console.log(res);
+  })
+  .catch((error) => {
+    // The write failed...
+    console.error(error);
+  });
+}
+
+export const updateCartCount = (userId, cartId, variable) => {
+  const db = getDatabase();
+  const postRef = ref(db, `/user-cart/${userId}/${cartId}`);
+
+  runTransaction(postRef, (cart) => {
+    if (cart) {
+      if (variable === 'increase') {
+        cart.count++;
+      } else {
+        cart.count--;
+      }
+    }
+    return cart;
+  });
+}
+
+// export const updateCart = (userId, cartId, cart) => {
+//   const db = getDatabase();
+//   set(ref(db, `/user-cart/${userId}/${cartId}`), {
+//     cart
+//   })
+//   .then((res) => {
+//     // Data saved successfully!
+//     console.log(res);
+//   })
+//   .catch((error) => {
+//     // The write failed...
+//     console.error(error);
+//   });
+// }
