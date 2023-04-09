@@ -198,17 +198,21 @@ export const removeCartItem = (userId, cartId) => {
 export const updateCartCount = (userId, cartId, variable) => {
   const db = getDatabase();
   const postRef = ref(db, `/user-cart/${userId}/${cartId}`);
-
-  runTransaction(postRef, (cart) => {
-    if (cart) {
-      if (variable === 'increase') {
-        cart.count++;
-      } else {
-        cart.count--;
+  try {
+    runTransaction(postRef, (cart) => {
+      if (cart) {
+        if (variable === 'increase') {
+          cart.count++;
+        } else {
+          cart.count--;
+        }
       }
-    }
-    return cart;
-  });
+      return cart;
+    });
+  } catch(err) {
+    console.error(err);
+  }
+
 }
 
 // export const updateCart = (userId, cartId, cart) => {

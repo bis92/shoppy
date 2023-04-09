@@ -5,11 +5,12 @@ import axios from 'axios';
 import { addProduct } from '../api/firebase';
 import { v4 as uuidv4 } from 'uuid';
 import { GrStatusGood } from 'react-icons/gr'
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function AddProduct() {
 
     const navigate = useNavigate();
-
+    const queryClient = useQueryClient();
     useEffect(() => {
         const auth = getAuth();
         onAuthStateChanged(auth, (user) => {
@@ -40,16 +41,7 @@ export default function AddProduct() {
     }
 
     const handleChangeFile = (e) => {
-        console.log(e);
-
-        // 파일 정보
-        console.log(e.target.files);
-        // 가짜 경로
-        console.log(e.target.value);
         const files = e.target.files;
-
-        // setSelectedImg(e.target.value);
-
         const fileReader = new FileReader();
         fileReader.readAsDataURL(files[0]);
         fileReader.onload = (e) => {
@@ -95,6 +87,7 @@ export default function AddProduct() {
             imgURL && await addProduct(newProduct, productId, imgURL);
             setLoading(false);
             displaySuccess();
+            queryClient.invalidateQueries({ queryKey: ['products'] })
         }
     }
 

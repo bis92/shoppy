@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React  from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -10,6 +10,7 @@ import ProductDetail from './page/ProductDetail';
 import Carts from './page/Carts';
 import AddProduct from './page/AddProduct';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import Home from './page/Home';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -50,6 +51,7 @@ root.render(
     <RouterProvider router={router}>
       <App />
     </RouterProvider>
+    <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
 );
 

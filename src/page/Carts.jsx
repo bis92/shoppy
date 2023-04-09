@@ -33,7 +33,7 @@ export default function Carts() {
         return carts.reduce((prev, curr) => prev + parseInt(curr.price * curr.count), 0);
     }
 
-    const { isLoading, isError, data: carts , error } = useQuery(['carts'], () => user && getCarts(user.uid, 'cartPage'));
+    const { isLoading, isError, data: carts , error } = useQuery(['carts'], () => user && getCarts(user.uid));
     if (isLoading) {
         return <span>Loading...</span>
     }

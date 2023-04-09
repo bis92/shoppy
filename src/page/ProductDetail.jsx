@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { addCart } from '../api/firebase';
 import { UserContext } from '../context/UserContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ProductDetail() {
     const { user } = useContext(UserContext);
@@ -17,6 +18,9 @@ export default function ProductDetail() {
             setMessage('');
         }, 5000)
     }
+
+    const queryClient = useQueryClient()
+
     const handleSubmit = async (e) => {
         if(e) {
             e.preventDefault();
@@ -25,11 +29,12 @@ export default function ProductDetail() {
         if(res){
             setMessage(res.message)
             displayMessage(res.message);
+            queryClient.invalidateQueries({ queryKey: ['carts'] })
         }
     }
     return (
         <div className="flex flex-col justify-center mt-4 w-11/12 m-auto">
-            <span className='flex justify-start my-4'>>{category}</span>
+            <span className='flex justify-start my-4'>{category}</span>
             <div className='flex justify-center'>
                 <img src={imgURL} className='w-1/2' />
                 <div className='flex flex-col w-1/2 p-4'>

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './Header.module.css';
 import { AiTwotoneShop } from 'react-icons/ai';
-import { getCarts, googleLogin, googleLogout } from '../api/firebase';
+import { googleLogin, googleLogout } from '../api/firebase';
 import { GrEdit } from 'react-icons/gr';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
@@ -10,7 +10,6 @@ export default function Header() {
 
     const navigate = useNavigate();
     const { user, updateUser } = useContext(UserContext);
-    const [cartItem, setCartItem] = useState([]);
 
     const handleLogin = async () => {
         const res = await googleLogin();
@@ -20,18 +19,6 @@ export default function Header() {
     const handleLogout = async () => {
         const res = await googleLogout();
         updateUser(res);
-    }
-
-    const handleGetCart = async () => {
-        if(user){
-            const res = await getCarts(user.uid);
-            if(res){
-                const cartArr = Object.values(res);
-                return setCartItem(cartArr);
-            }
-        } else {
-            return setCartItem([]);
-        }
     }
 
     useEffect(() => {

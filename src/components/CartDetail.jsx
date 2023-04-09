@@ -2,16 +2,24 @@ import React from 'react';
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { BsFillTrash3Fill } from 'react-icons/bs';
 import { removeCartItem, updateCartCount } from '../api/firebase';
+import { useQueryClient } from '@tanstack/react-query';
 export default function CartDetail({cart: {imgURL, name, size, price, count, productId}, setPriceFormat, keyId, userId}) {
+
+    const queryClient = useQueryClient();
 
     const updateCart = (variable) => {
         if(variable === 'decrease' && count <= 1){
             return;
         }
-        return updateCartCount(userId, keyId, variable);
+        updateCartCount(userId, keyId, variable);
+        setTimeout(() => {
+            queryClient.invalidateQueries({ queryKey: ['carts']})
+        }, 500)
+        
     }
     const removeCart = () => {
-        return removeCartItem(userId, keyId)
+        removeCartItem(userId, keyId)
+        queryClient.invalidateQueries({ queryKey: ['carts'] })
     }
 
     return (
