@@ -1,12 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { getCarts } from '../api/firebase';
 import { UserContext } from '../context/UserContext';
-import { useQuery } from '@tanstack/react-query';
 import CartDetail from '../components/CartDetail';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { FaEquals } from 'react-icons/fa';
+import useCarts from '../hooks/useCarts';
 export default function Carts() {
 
     const navigate = useNavigate();
@@ -33,12 +32,21 @@ export default function Carts() {
         return carts.reduce((prev, curr) => prev + parseInt(curr.price * curr.count), 0);
     }
 
-    const { isLoading, isError, data: carts , error } = useQuery(['carts'], () => user && getCarts(user.uid));
+    const { isLoading, isError, carts, error } = useCarts();
+    
     if (isLoading) {
         return <span>Loading...</span>
     }
     if (isError) {
-        return <span>Error: {error.message}</span>
+        return (
+            <div>
+                <div className='border-t-2 border-gray-200 mt-2 flex flex-col'>
+                    <span>Error: {error.message}</span>
+                    <span className='text-2xl text-center'>장바구니에 추가한 상품이 없습니다. :)</span>
+                </div>
+            </div>
+            
+        )
     }
     if(carts){
         return (
@@ -74,6 +82,10 @@ export default function Carts() {
                 </button>
             </div>
         );
+    } else {
+        <div className='border-t-2 border-gray-200 mt-2'>
+            장바구니에 추가한 상품이 없습니다. :)
+        </div>
     }
 
 }

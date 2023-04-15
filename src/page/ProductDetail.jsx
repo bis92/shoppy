@@ -13,7 +13,7 @@ export default function ProductDetail() {
         setSize(e.target.value);
     }
 
-    const displayMessage = (messageVal) => {
+    const displayMessage = () => {
         setTimeout(() => {
             setMessage('');
         }, 5000)

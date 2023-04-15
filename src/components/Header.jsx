@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import styles from './Header.module.css';
 import { AiTwotoneShop } from 'react-icons/ai';
 import { googleLogin, googleLogout } from '../api/firebase';
@@ -20,10 +20,6 @@ export default function Header() {
         const res = await googleLogout();
         updateUser(res);
     }
-
-    useEffect(() => {
-        // handleGetCart();
-    }, [user])
 
     return (
         <header className={styles.header}>
